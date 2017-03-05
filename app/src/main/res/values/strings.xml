@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MorseTalk</string>
+    <string name="send_msg">Send Message</string>
+    <string name="send_msg_cancel">Cancel</string>
 </resources>
