@@ -70,9 +70,7 @@ public class Morse {
             }
             sb.append(morseCode);
         }
-
-
-
+        
         return sb.toString();
     }
 }
