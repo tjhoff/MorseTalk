@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-
+        Log.d(NAME, "Resuming activity");
         getCamera();
     }
 
@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
             camera.release();
             camera = null;
         }
+
+        Log.d(NAME, "Pausing activity");
     }
 
     private void setup(){
@@ -155,8 +157,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void cameraSetup(){
         try{
+            Log.d(NAME, "Setting up camera.");
+            cameraView = new SurfaceTexture(0);
             camera.setPreviewTexture(cameraView);
+
+            cameraView.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
+                @Override
+                public void onFrameAvailable(SurfaceTexture surfaceTexture) {
+                    Log.d(NAME, "Got a frame");
+                }
+            });
+            camera.setPreviewCallback(new Camera.PreviewCallback(){
+
+                @Override
+                public void onPreviewFrame(byte[] bytes, Camera camera) {
+                    Log.d(NAME, "Got a preview frame");
+                }
+            });
             camera.startPreview();
+
 
             Camera.Parameters params = camera.getParameters();
         }
@@ -226,11 +245,11 @@ public class MainActivity extends AppCompatActivity {
             camera.setParameters(params);
             camera.stopPreview();
         }
-        Canvas light_indicator_canvas = light_indicator_holder.lockCanvas();
+        Canvas light_indicator_canvas = lightIndicatorHolder.lockCanvas();
         if (light_indicator_canvas != null) {
             light_indicator_canvas.drawColor(Color.BLACK);
         }
-        light_indicator_holder.unlockCanvasAndPost(light_indicator_canvas);
+        lightIndicatorHolder.unlockCanvasAndPost(light_indicator_canvas);
     }
 
     private void getCamera() {
